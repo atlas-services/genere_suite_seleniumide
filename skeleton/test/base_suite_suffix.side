@@ -1,0 +1,12 @@
+],
+  "suites": [{
+    "id": "a1a2a3a4-b1b2b3-c1c2c3-d1d2d3d4-e1e2e3e4e5",
+    "name": "Suite test test_suite ",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": ["64544188-4587-416d-9425-c7bcb5714113"]
+  }],
+  "urls": ["https://test_url"],
+  "plugins": []
+}
