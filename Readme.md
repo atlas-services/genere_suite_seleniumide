@@ -1,19 +1,16 @@
 # Objet : 
-Lorsque vous testez vos formulaire, la saisie est une opération fastidieuse
+Lorsque vous testez vos formulaires, la saisie est une opération fastidieuse
 Utiliser selenium ide peut rendre la tache moins rébarbative.
 En utilisant ce script vous pourrez générer des suites de tests selenium variées rapidement.
 
 ### Pré requis
-Connaissance sommaire du html/css d'un fichier "selenium.side"
+Connaissance sommaire des langages html/css/json d'un fichier "selenium.side"
 
 ### Le skeleton :
-Il contient des modèles de seleniums avec des variables {{ma_variable_n}} qui seront gérées par le script pour builder la suite de test sélénium et alimentées par des datas (voir "###Les data")
-Arborescence :
-skeleton/$nom_projet/$uri
+Il contient des modèles de seleniums qui seront gérés par le script pour builder la suite de test sélénium "monsite/suite.side" et alimentées par des datas (voir "### Les data")
 
 ### Les datas : 
-Dans le fichier excel du projet situé dans le répertoire "data" : $nom_projet.csv
-Actuellement les datas concerne uniquement une seule colonne (email par exemple)
+Dans le fichier excel du projet situé dans le répertoire "data" : data/monsite/data.xlsx
 
 ### Les Templates :
 Fichiers selenium au format "suite.side"
@@ -21,17 +18,17 @@ Ils sont divisées en 3 parties : un entête, un corps et un pied de page
 Seul le fichier base_unitaire.side est à modifier en utilisant le fichier selenium enregistré avec séléniumide.
 
 ### Préparation du projet init_project.sh :
-./init_project.sh $nom_projet 
+./init_project.sh monsite : prépae les datas et le skeleton du projet monsite
 
 ### Execution du script genere_seleniumide.sh :
-./genere_suite_seleniumide.sh $nom_projet 
+./genere_suite_seleniumide.sh monsite
 
 ### Résultat
-=> génère un script "suite_$nom_projet.side" de test exploitable par seleniumide situé dans le répertoire $nom_projet
+=> génère un script "monsite/suite.side" de test exploitable par seleniumide.
 
-#################################### ÉTAPES À SUIVRE POUR LE SITE hermes-cms.org###################################################
+### ÉTAPES À SUIVRE (exemple pour le site hermes-cms.org)
 
-Nom de la suite de test : hermes-cms
+Nom du projet : hermes-cms
 url du site à tester : hermes-cms.org
 uri du site à tester : /fr/contact
 valeur1 : prenom
@@ -44,17 +41,17 @@ valeur5 : message
 1. Installer l'extension selenium ide sur votre navigateur : https://addons.mozilla.org/fr/firefox/addon/selenium-ide/?utm_source=addons.mozilla.org&utm_medium=referral&utm_content=search
 
 2. Initialiser le projet :
-Exécuter la commande ./init_project.sh monsite
+Exécuter la commande ./init_project.sh hermes-cms
 
-Cela Dupliquera le répertoire data/test dans data/monsite où monsite est le nom du site à tester (ex: monsite = hermes-cms) : 
-Modifier le fichier data/monsite/data.xlsx pour l'adapter au formulaire testé :
-Les 2 premières colonnes correspondes à l'url du site (ex : hermes-cms.org) et à l'uri( "/fr/contact") de la page du formulaire à tester.
+Cela Dupliquera le répertoire data/test dans data/hermes-cms
+Modifier le fichier data/hermes-cms/data.xlsx pour l'adapter au formulaire testé :
+Les 2 premières colonnes correspondent à l'url du site (ex : hermes-cms.org) et à l'uri( "/fr/contact") de la page du formulaire à tester.
 Les colonnes suivantes doivent avoir pour entête valeur1, valeur2, ..., valeur10.
 On n'ira pas au dela de l'indice correspondant aux nombres de champs à saisir dans le formulaire.
-La valeur sous ces colonnes est la valeur dans le formulaire. 
-Exemple : la colonne "valeur1" aura une liste de nom si le nom est le premier champs du formulaire.
+La valeur sous ces colonnes est la valeur dans le formulaire.
+Exemple : la colonne "valeur1" aura une liste de noms si le nom est le premier champs du formulaire à tester.
 
-Cela Dupliquera le répertoire skeleton/test dans skeleton/monsite (skeleton/hermes-cms)
+Cela Dupliquera le répertoire skeleton/test dans skeleton/hermes-cms (skeleton/hermes-cms)
 
 3. Enregistrer un nouveau test selenium pour le site web à tester (exemple : formulaire de contact à tester https://hermes-cms.org/fr/contact) en insérant les valeur "valeur1", "valeur2"... dans le formulaire.
 Sauvegarder votre test dans un fichier "test.side".
@@ -71,7 +68,5 @@ Copier l'ensemble des blocks de votre fichier test.side qui ont ce modèle :
 	},
 à la place du block {{REMPLACER PAR LES BLOCKS SELENIUM}}
 
-5. fichier base_unitaire.side : remplacer les valeurs par les variables adéquates
-	Après "command" :
-		"target": "{{test_uri}}",
-		"value": "{{valeurN}}" où N est l'indice de la valeur du formulaire. 
+5. Exécuter le script ./genere_suite_seleniumide.sh hermes-cms
+Le fichier hermes-cms/suite.side a été créé et est désormais exploitable par l'extension seleniumide.
