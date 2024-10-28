@@ -10,10 +10,10 @@ echo $message
 exit
 done
 
-skeleton_base_suite_prefix="base_suite_prefix.side"
-skeleton_base_unitaire="base_unitaire.side"
-skeleton_base_suite_suffix="base_suite_suffix.side"
-skeleton_base_suite="suite.side"
+base_suite_prefix="base_suite_prefix.side"
+base_unitaire="base_unitaire.side"
+base_suite_suffix="base_suite_suffix.side"
+base_suite="suite.side"
 
 cd "$(dirname "$0")"
 SCRIPT_DIR="$(pwd)"
@@ -22,7 +22,7 @@ SCRIPT_DIR="$(pwd)"
 project=$1 
 
 # set the template informations
-skeleton_base="skeleton/$project/"
+base="project/$project/"
 
 ### create the directories
 dir="$SCRIPT_DIR/$project/"
@@ -33,8 +33,10 @@ prefix_newfile="test_unitaire"
 target_join_suite="test_join_suite.side"
 target_join_unitaire="test_join_unitaire.side"
 
-
 cd $SCRIPT_DIR
+### remove target suite.side directory before creating new tests
+rm -Rf "$SCRIPT_DIR/$project" 2>/dev/null 1>/dev/null
+### create target suite.side directory before creating new tests
 mkdir $dir 2>/dev/null 1>/dev/null;
 
 ### get the datas from xlsx to csv file
@@ -51,16 +53,12 @@ search_test_suite="test_suite"
 search_url_name="test_url"
 search_uri_name="test_uri"
 
-
 ###count nb tests
 count=$(grep -c ^ < "$filename") #get number of lines in particular file
 last=$((count -1));
 
 #Read each line of the file in each iteration
 i=0;
-
-### remove tests before creating new tests
-rm -Rf "$dir/*"
 
 slash="/"
 replace_slash="\/"
@@ -72,11 +70,10 @@ do
 let i++
 
 export newfile="$prefix_newfile$i.side"
-###export targetfile="$dir$newfile"
 export targetfile="$dir$newfile"
 
 
-cp $skeleton_base$skeleton_base_unitaire $targetfile
+cp $base$base_unitaire $targetfile
 
 while IFS="," read -r url uri valeur1 valeur2 valeur3 valeur4 valeur5 valeur6 valeur7 valeur8 valeur9 valeur10 ;
  do
@@ -115,13 +112,13 @@ cat $targetfile >> $dir$target_join_unitaire
 done < <(tail -n +2 $filename)
 
 #add tests unit in one test suite
-cat $skeleton_base$skeleton_base_suite_prefix >> $dir$skeleton_base_suite
-cat $dir$target_join_unitaire >> $dir$skeleton_base_suite
-cat $skeleton_base$skeleton_base_suite_suffix >> $dir$skeleton_base_suite
+cat $base$base_suite_prefix >> $dir$base_suite
+cat $dir$target_join_unitaire >> $dir$base_suite
+cat $base$base_suite_suffix >> $dir$base_suite
 
 #replace url tests unit
-find $dir -name $skeleton_base_suite -type f -exec sed -i "s/$search_test_suite/$url_test/g" {} \;
-find $dir -name $skeleton_base_suite -type f -exec sed -i "s/$search_url_name/$url_test/g" {} \;
+find $dir -name $base_suite -type f -exec sed -i "s/$search_test_suite/$url_test/g" {} \;
+find $dir -name $base_suite -type f -exec sed -i "s/$search_url_name/$url_test/g" {} \;
 
 #remove temporary unitaire tests
 cd $dir
@@ -129,6 +126,4 @@ rm -f *unitaire*.side
 rm -f *join*.side
 
 ### everithing is ok!
-echo "La suite de tests sélénium $skeleton_base_suite a été créée dans le répertoire $dir"
-
-
+echo "La suite de tests sélénium $base_suite a été créée dans le répertoire $dir"
